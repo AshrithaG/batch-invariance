@@ -17,8 +17,8 @@ of throughput.**
 
 Qwen3-1.7B, one RTX 4090, vLLM 0.28.0, CUDA graphs enabled, 128 tokens per
 request with `ignore_eos`, five timed repeats per cell after a discarded warmup,
-median reported. Run-to-run spread was 0.3 to 3.3%, an order of magnitude below
-the effect.
+median reported. Run-to-run spread on the eager runs was 0.3 to 3.3%, an order
+of magnitude below the effect.
 
 ## Measure it with CUDA graphs on, or understate it by half
 
@@ -26,7 +26,7 @@ Running both modes with `enforce_eager=True` gives a much smaller number:
 
 | batch | eager default | eager invariant | eager cost | cost with CUDA graphs |
 |---|---|---|---|---|
-| 1 | 71.9 | 52.3 | 27.2% | **66.6%** |
+| 1 | 71.9 | 52.3 | 27.3% | **66.6%** |
 | 4 | 276.9 | 192.9 | 30.3% | **62.9%** |
 | 16 | 1098.5 | 777.9 | 29.2% | **60.8%** |
 | 64 | 4168.0 | 3049.9 | 26.8% | **53.6%** |
