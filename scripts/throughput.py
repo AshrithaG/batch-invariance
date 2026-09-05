@@ -28,6 +28,10 @@ def main() -> None:
     ap.add_argument("--batch-sizes", type=int, nargs="+", default=[1, 4, 16, 64])
     ap.add_argument("--repeats", type=int, default=5)
     ap.add_argument("--max-tokens", type=int, default=128)
+    ap.add_argument("--no-eager", action="store_true",
+                    help="allow CUDA graph capture, which is vLLM's default. The "
+                         "eager numbers compare the two modes fairly but neither "
+                         "gets graphs; this asks what a real deployment sees.")
     ap.add_argument("--out", type=Path, default=Path("results/throughput.json"))
     args = ap.parse_args()
 
@@ -36,14 +40,15 @@ def main() -> None:
 
     invariant = os.environ.get("VLLM_BATCH_INVARIANT", "0") == "1"
     llm = LLM(model=args.model, max_model_len=1024, gpu_memory_utilization=0.85,
-              enforce_eager=True, seed=0)
+              enforce_eager=not args.no_eager, seed=0)
     # ignore_eos so every request generates exactly max_tokens; otherwise the
     # measurement is partly a measurement of how long the answers happened to be
     params = SamplingParams(temperature=0.0, max_tokens=args.max_tokens,
                             ignore_eos=True)
 
     print(f"vLLM {vllm.__version__}  {args.model}  "
-          f"VLLM_BATCH_INVARIANT={'1' if invariant else '0'}")
+          f"VLLM_BATCH_INVARIANT={'1' if invariant else '0'}  "
+          f"cuda_graphs={'on' if args.no_eager else 'off'}")
     print(f"{args.repeats} repeats per batch size, first discarded as warmup\n")
     print(f"{'batch':>7}{'median tok/s':>15}{'min':>10}{'max':>10}{'spread':>9}")
     print("-" * 51)
@@ -68,7 +73,8 @@ def main() -> None:
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(
         {"vllm": vllm.__version__, "model": args.model,
-         "batch_invariant": invariant, "max_tokens": args.max_tokens,
+         "batch_invariant": invariant, "cuda_graphs": args.no_eager,
+         "max_tokens": args.max_tokens,
          "results": {str(k): v for k, v in results.items()}}, indent=2))
     print(f"\nwritten to {args.out}")
 
