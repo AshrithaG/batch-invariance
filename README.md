@@ -5,31 +5,49 @@ which unrelated requests share their batch. vLLM ships a fix for this,
 `VLLM_BATCH_INVARIANT=1`. The documentation says it costs performance and does
 not say how much.
 
-**It works completely, and it costs 27 to 30% of throughput at every batch size.**
+**It works completely, and in vLLM's default configuration it costs 54 to 67%
+of throughput.**
 
-| batch | default tok/s | invariant tok/s | cost | run-to-run noise |
+| batch | default tok/s | invariant tok/s | cost |
+|---|---|---|---|
+| 1 | 226.1 | 75.5 | 66.6% |
+| 4 | 802.9 | 298.1 | 62.9% |
+| 16 | 3112.6 | 1220.9 | 60.8% |
+| 64 | 11152.0 | 5176.1 | 53.6% |
+
+Qwen3-1.7B, one RTX 4090, vLLM 0.28.0, CUDA graphs enabled, 128 tokens per
+request with `ignore_eos`, five timed repeats per cell after a discarded warmup,
+median reported. Run-to-run spread was 0.3 to 3.3%, an order of magnitude below
+the effect.
+
+## Measure it with CUDA graphs on, or understate it by half
+
+Running both modes with `enforce_eager=True` gives a much smaller number:
+
+| batch | eager default | eager invariant | eager cost | cost with CUDA graphs |
 |---|---|---|---|---|
-| 1 | 71.9 | 52.3 | 27.2% | 3.3% |
-| 4 | 276.9 | 192.9 | 30.3% | 0.3% |
-| 16 | 1098.5 | 777.9 | 29.2% | 1.5% |
-| 64 | 4168.0 | 3049.9 | 26.8% | 1.6% |
+| 1 | 71.9 | 52.3 | 27.2% | **66.6%** |
+| 4 | 276.9 | 192.9 | 30.3% | **62.9%** |
+| 16 | 1098.5 | 777.9 | 29.2% | **60.8%** |
+| 64 | 4168.0 | 3049.9 | 26.8% | **53.6%** |
 
-Qwen3-1.7B, one RTX 4090, 128 tokens per request with `ignore_eos`, five timed
-repeats per cell after a discarded warmup, median reported. Noise is an order of
-magnitude below the effect.
+That comparison is fair between the two modes and misleading for anyone deciding
+whether to enable the flag, because it compares two configurations that are both
+handicapped. CUDA graphs are on by default in vLLM, and the two modes do not
+benefit from them equally:
 
-## The cost is flat, which says where it comes from
+| | speedup from CUDA graph capture |
+|---|---|
+| default kernels | 2.7x to 3.1x |
+| batch-invariant kernels | 1.4x to 1.7x |
 
-At batch 1 there is no batch to be invariant across, and the cost is still
-27.2%. So this is not the price of giving up batch-size-dependent
-optimizations. It is the price of the constrained reduction strategy itself,
-paid per kernel whether or not anything is batched.
+The batch-invariant path captures far less well, so most of the real cost is the
+optimization you give up rather than the kernels themselves being slower.
 
-That is a more optimistic reading than a scaling cost would be. An overhead that
-grows with batch size would be inherent to the trade-off; a flat one is an
-implementation property, and implementations improve. The vLLM docs describe
-batch invariance as under active development with performance work planned,
-which is consistent with this shape.
+The eager cost is flat across batch size, including at batch 1 where there is no
+batch to be invariant across, which says the kernel overhead alone is roughly
+28%. The graph-enabled cost falls as batches grow, from 66.6% at batch 1 to
+53.6% at batch 64, so larger batches recover part of the capture penalty.
 
 ## The problem it fixes
 
@@ -100,7 +118,7 @@ VLLM_BATCH_INVARIANT=1 python scripts/throughput.py --out results/tput_invariant
 ## Scope
 
 One model, one GPU, one vLLM version, greedy decoding, 30 prompts, batch sizes
-up to 64. The 27 to 30% figure is for this configuration and should not be
+up to 64. The 54 to 67% figure is for this configuration and should not be
 quoted as a general constant; the point is that it is measurable and currently
 unpublished, not that it is universal.
 
