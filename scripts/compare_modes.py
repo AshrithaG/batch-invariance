@@ -44,8 +44,10 @@ def main() -> None:
 
     a, b = default.get("throughput_tok_s"), invariant.get("throughput_tok_s")
     if a and b:
-        print(f"\ncost of determinism: {1 - b / a:+.1%} throughput "
-              f"({a:.1f} to {b:.1f} tok/s)")
+        print(f"\ncost of determinism: {1 - b / a:.1%} of throughput "
+              f"({a:.1f} down to {b:.1f} tok/s)")
+        print("note: this figure comes from a single generation; use "
+              "scripts/throughput.py for a measured one")
 
     still = affected(invariant)
     if still:
