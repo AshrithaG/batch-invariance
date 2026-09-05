@@ -106,3 +106,8 @@ unpublished, not that it is universal.
 
 Throughput uses `ignore_eos` so every request emits exactly 128 tokens.
 Without it the measurement partly reflects how long each answer happened to be.
+
+The headline figure is measured with CUDA graphs enabled because that is vLLM's
+default. Both sets of numbers are reported above, since the eager comparison is
+the one that isolates the kernels while the graph-enabled one is the one that
+answers "what does this cost me".
