@@ -75,15 +75,32 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=Path("results/rate.json"))
     args = ap.parse_args()
 
+    import os
+    import time
+
     from vllm import LLM, SamplingParams
     import vllm
+
+    # vLLM reads this at import/init time, so it has to be set in the
+    # environment before launching, not here.
+    invariant = os.environ.get("VLLM_BATCH_INVARIANT", "0") == "1"
+
     llm = LLM(model=args.model, max_model_len=1024, gpu_memory_utilization=0.85,
               enforce_eager=True, seed=0)
     params = SamplingParams(temperature=0.0, max_tokens=args.max_tokens)
 
     prompts = PROMPTS[: args.n_prompts]
     print(f"vLLM {vllm.__version__}  {args.model}  batch {args.batch_size}  "
-          f"{args.compositions} compositions  {len(prompts)} prompts\n")
+          f"{args.compositions} compositions  {len(prompts)} prompts")
+    print(f"VLLM_BATCH_INVARIANT={'1 (deterministic kernels)' if invariant else '0 (default)'}\n")
+
+    # Throughput, measured on the same work the correctness sweep does, so the
+    # cost figure and the invariance figure come from one run rather than two
+    # differently shaped ones.
+    t0 = time.perf_counter()
+    warm = llm.generate([prompts[0]] * args.batch_size, params)
+    gen_tokens = sum(len(o.outputs[0].token_ids) for o in warm)
+    throughput = gen_tokens / (time.perf_counter() - t0)
 
     rows = []
     for i, probe in enumerate(prompts):
@@ -111,7 +128,9 @@ def main() -> None:
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(
         {"vllm": vllm.__version__, "model": args.model,
-         "batch_size": args.batch_size, "rows": rows}, indent=2))
+         "batch_size": args.batch_size, "batch_invariant": invariant,
+         "throughput_tok_s": throughput, "rows": rows}, indent=2))
+    print(f"throughput on a batch of {args.batch_size}: {throughput:.1f} tok/s")
     print(f"written to {args.out}")
 
 
