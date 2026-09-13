@@ -1,0 +1,156 @@
+{
+  "model": "Qwen/Qwen3-1.7B",
+  "quant": null,
+  "rows": [
+    {
+      "batch_size": 2,
+      "probe": "Explain why the sky is blue in one sentence.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 2,
+      "probe": "List three prime numbers.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 2,
+      "probe": "def binary_search(arr, target):",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 2,
+      "probe": "The capital of France is",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 2,
+      "probe": "Summarise the water cycle in two sentences.",
+      "identical": false,
+      "first_divergence": 3
+    },
+    {
+      "batch_size": 4,
+      "probe": "Explain why the sky is blue in one sentence.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 4,
+      "probe": "List three prime numbers.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 4,
+      "probe": "def binary_search(arr, target):",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 4,
+      "probe": "The capital of France is",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 4,
+      "probe": "Summarise the water cycle in two sentences.",
+      "identical": false,
+      "first_divergence": 3
+    },
+    {
+      "batch_size": 8,
+      "probe": "Explain why the sky is blue in one sentence.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 8,
+      "probe": "List three prime numbers.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 8,
+      "probe": "def binary_search(arr, target):",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 8,
+      "probe": "The capital of France is",
+      "identical": false,
+      "first_divergence": 7
+    },
+    {
+      "batch_size": 8,
+      "probe": "Summarise the water cycle in two sentences.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 16,
+      "probe": "Explain why the sky is blue in one sentence.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 16,
+      "probe": "List three prime numbers.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 16,
+      "probe": "def binary_search(arr, target):",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 16,
+      "probe": "The capital of France is",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 16,
+      "probe": "Summarise the water cycle in two sentences.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 32,
+      "probe": "Explain why the sky is blue in one sentence.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 32,
+      "probe": "List three prime numbers.",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 32,
+      "probe": "def binary_search(arr, target):",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 32,
+      "probe": "The capital of France is",
+      "identical": true,
+      "first_divergence": null
+    },
+    {
+      "batch_size": 32,
+      "probe": "Summarise the water cycle in two sentences.",
+      "identical": true,
+      "first_divergence": null
+    }
+  ]
+}

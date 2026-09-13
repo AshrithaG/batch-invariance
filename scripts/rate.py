@@ -73,6 +73,10 @@ def main() -> None:
     ap.add_argument("--n-prompts", type=int, default=len(PROMPTS))
     ap.add_argument("--max-tokens", type=int, default=64)
     ap.add_argument("--out", type=Path, default=Path("results/rate.json"))
+    ap.add_argument("--no-eager", action="store_true",
+                    help="allow torch.compile and CUDA graph capture, vLLM's default. "
+                         "The throughput headline is measured this way, so the "
+                         "invariance claim has to hold this way too.")
     args = ap.parse_args()
 
     import os
@@ -86,13 +90,14 @@ def main() -> None:
     invariant = os.environ.get("VLLM_BATCH_INVARIANT", "0") == "1"
 
     llm = LLM(model=args.model, max_model_len=1024, gpu_memory_utilization=0.85,
-              enforce_eager=True, seed=0)
+              enforce_eager=not args.no_eager, seed=0)
     params = SamplingParams(temperature=0.0, max_tokens=args.max_tokens)
 
     prompts = PROMPTS[: args.n_prompts]
     print(f"vLLM {vllm.__version__}  {args.model}  batch {args.batch_size}  "
           f"{args.compositions} compositions  {len(prompts)} prompts")
-    print(f"VLLM_BATCH_INVARIANT={'1 (deterministic kernels)' if invariant else '0 (default)'}\n")
+    print(f"VLLM_BATCH_INVARIANT={'1 (deterministic kernels)' if invariant else '0 (default)'}  "
+          f"cuda_graphs={'on' if args.no_eager else 'off'}\n")
 
     # Throughput, measured on the same work the correctness sweep does, so the
     # cost figure and the invariance figure come from one run rather than two
@@ -129,6 +134,7 @@ def main() -> None:
     args.out.write_text(json.dumps(
         {"vllm": vllm.__version__, "model": args.model,
          "batch_size": args.batch_size, "batch_invariant": invariant,
+         "cuda_graphs": args.no_eager,
          "throughput_tok_s": throughput, "rows": rows}, indent=2))
     print(f"throughput on a batch of {args.batch_size}: {throughput:.1f} tok/s")
     print(f"written to {args.out}")
