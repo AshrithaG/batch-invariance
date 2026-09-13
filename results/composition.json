@@ -1,0 +1,21 @@
+{
+  "model": "Qwen/Qwen3-1.7B",
+  "batch_size": 4,
+  "results": {
+    "Summarise the water cycle in two sentences.": {
+      "distinct_outputs": 3,
+      "matched_alone": 2,
+      "compositions": 10
+    },
+    "The capital of France is": {
+      "distinct_outputs": 1,
+      "matched_alone": 10,
+      "compositions": 10
+    },
+    "Explain why the sky is blue in one sentence.": {
+      "distinct_outputs": 1,
+      "matched_alone": 10,
+      "compositions": 10
+    }
+  }
+}

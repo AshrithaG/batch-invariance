@@ -1,0 +1,159 @@
+{
+  "vllm": "0.28.0",
+  "model": "Qwen/Qwen3-1.7B",
+  "batch_size": 4,
+  "batch_invariant": false,
+  "throughput_tok_s": 266.4593587867466,
+  "rows": [
+    {
+      "prompt": "Summarise the water cycle in two sentences.",
+      "distinct": 2,
+      "matched_alone": 2
+    },
+    {
+      "prompt": "Explain why the sky is blue in one sentence.",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "The capital of France is",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "List three prime numbers.",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "def binary_search(arr, target):",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Describe the causes of the First World War.",
+      "distinct": 2,
+      "matched_alone": 0
+    },
+    {
+      "prompt": "Write a haiku about autumn.",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "What is the difference between TCP and UDP?",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Explain recursion to a ten year old.",
+      "distinct": 3,
+      "matched_alone": 0
+    },
+    {
+      "prompt": "Name four countries in South America.",
+      "distinct": 2,
+      "matched_alone": 2
+    },
+    {
+      "prompt": "How does a refrigerator work?",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Write a limerick about a stubborn goat.",
+      "distinct": 2,
+      "matched_alone": 0
+    },
+    {
+      "prompt": "What is the time complexity of quicksort?",
+      "distinct": 2,
+      "matched_alone": 1
+    },
+    {
+      "prompt": "Summarise the plot of Macbeth.",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Explain what a hash table is.",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Give three uses for a paperclip.",
+      "distinct": 3,
+      "matched_alone": 0
+    },
+    {
+      "prompt": "What causes rainbows?",
+      "distinct": 4,
+      "matched_alone": 0
+    },
+    {
+      "prompt": "def merge_sort(items):",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Describe the Doppler effect briefly.",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Why do leaves change colour in autumn?",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Explain the difference between weather and climate.",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Write a two line poem about the sea.",
+      "distinct": 2,
+      "matched_alone": 5
+    },
+    {
+      "prompt": "What is photosynthesis?",
+      "distinct": 2,
+      "matched_alone": 5
+    },
+    {
+      "prompt": "How do vaccines work?",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "List the noble gases.",
+      "distinct": 2,
+      "matched_alone": 5
+    },
+    {
+      "prompt": "Explain gradient descent in simple terms.",
+      "distinct": 2,
+      "matched_alone": 1
+    },
+    {
+      "prompt": "What is the boiling point of water at sea level?",
+      "distinct": 1,
+      "matched_alone": 6
+    },
+    {
+      "prompt": "Describe how a bill becomes law.",
+      "distinct": 3,
+      "matched_alone": 4
+    },
+    {
+      "prompt": "Write a short product description for a water bottle.",
+      "distinct": 3,
+      "matched_alone": 0
+    },
+    {
+      "prompt": "What is the Pythagorean theorem?",
+      "distinct": 2,
+      "matched_alone": 1
+    }
+  ]
+}
