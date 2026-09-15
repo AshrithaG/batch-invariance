@@ -158,3 +158,7 @@ The headline figure is measured with CUDA graphs enabled because that is vLLM's
 default. Both sets of numbers are reported above. The graph-enabled comparison is
 the one that answers "what does this cost me", and it is also the one closer to
 the kernels, since eager mode dilutes them with host launch cost.
+
+## License
+
+Code released under the MIT License (see `LICENSE`).
